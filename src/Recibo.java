@@ -8,6 +8,11 @@ public class Recibo {
     private double valorTotalConsolidado;
     private List<Aluguel> alugueis;
 
+    public Recibo() {
+        this.alugueis = new ArrayList<>();
+        this.dataEmissao = LocalDateTime.now();
+    }
+
     public void emitirRecibo() {
     }
 }

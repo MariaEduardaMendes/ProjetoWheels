@@ -57,4 +57,8 @@ public class Aluguel {
     public void setBicicleta(Bicicleta bicicleta) {
         this.bicicleta = bicicleta;
     }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
 }

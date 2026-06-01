@@ -8,6 +8,10 @@ public class Cliente {
     private String telefone;
     private List<Aluguel> historicoDeTransacoes;
 
+    public Cliente() {
+        this.historicoDeTransacoes = new ArrayList<>();
+    }
+
     public void cadastrar() {
     }
 

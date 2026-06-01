@@ -8,6 +8,7 @@ public class Main {
         System.out.println("--- Cenário 1: Aluguel Normal ---");
         Aluguel aluguel1 = new Aluguel();
         aluguel1.setBicicleta(bicicleta);
+        aluguel1.setCliente(cliente);
 
         aluguel1.realizarAluguel();
 
