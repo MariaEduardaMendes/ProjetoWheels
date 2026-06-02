@@ -17,9 +17,12 @@ public class Bicicleta {
         this.manutencoes = new ArrayList<>();
         this.horasDeUso = 0.0;
         this.estado = "ESTOQUE";
+        this.taxaPorHora = 15.0;
     }
 
-    public void cadastrar() {
+    public void cadastrar(String modelo) {
+        this.modelo = modelo;
+        System.out.println("SUCESSO: Bicicleta modelo '" + this.modelo + "' registrada no sistema com o ID " + this.id);
     }
 
     public void atualizarEstado(String novoEstado) {
@@ -43,4 +46,8 @@ public class Bicicleta {
 
     public int getId() { return id; }
     public String getEstado() { return estado; }
+    public double getTaxaPorHora() {
+        return this.taxaPorHora;
+    }
+
 }
