@@ -8,21 +8,26 @@ public class Bicicleta {
     private String estado;
     private double horasDeUso;
     private double taxaPorHora;
-    private List<Manutencao> manutencoes;
 
     private static final double LIMITE_HORAS_MANUTENCAO = 100.0;
 
     public Bicicleta() {
         this.id = contadorId++;
-        this.manutencoes = new ArrayList<>();
         this.horasDeUso = 0.0;
         this.estado = "ESTOQUE";
         this.taxaPorHora = 15.0;
     }
 
-    public void cadastrar(String modelo) {
+    // construtor para csv
+    public Bicicleta(int id, String modelo, String estado, double horasDeUso, double taxaPorHora) {
+        this.id = id;
         this.modelo = modelo;
-        System.out.println("SUCESSO: Bicicleta modelo '" + this.modelo + "' registrada no sistema com o ID " + this.id);
+        this.estado = estado;
+        this.horasDeUso = horasDeUso;
+        this.taxaPorHora = taxaPorHora;
+        if (id >= contadorId) {
+            contadorId = id + 1;
+        }
     }
 
     public void atualizarEstado(String novoEstado) {
@@ -49,5 +54,7 @@ public class Bicicleta {
     public double getTaxaPorHora() {
         return this.taxaPorHora;
     }
+    public String getModelo() { return modelo; }
+    public double getHorasDeUso() { return horasDeUso; }
 
 }

@@ -5,15 +5,21 @@ public class ControladorWheels {
     private List<Cliente> listaClientes = new ArrayList<>();
     private List<Bicicleta> listaBicicletas = new ArrayList<>();
     private List<Aluguel> alugueisAtivos = new ArrayList<>();
+    private List<Aluguel> todosOsAlugueis = new ArrayList<>();
     private List<Manutencao> manutencoesAtivas = new ArrayList<>();
 
     private GerenciadorCSV gerenciadorCSV = new GerenciadorCSV();
 
     public ControladorWheels() {
         this.listaClientes = gerenciadorCSV.carregarClientes();
+        this.listaBicicletas = gerenciadorCSV.carregarBicicletas();
 
-        listaBicicletas.add(new Bicicleta());
-        listaBicicletas.add(new Bicicleta());
+        if (listaBicicletas.isEmpty()) {
+            listaBicicletas.add(new Bicicleta());
+            listaBicicletas.add(new Bicicleta());
+            gerenciadorCSV.salvarBicicletas(listaBicicletas);
+        }
+        this.todosOsAlugueis = gerenciadorCSV.carregarAlugueis(listaClientes, listaBicicletas, alugueisAtivos);
     }
 
     public void cadastrarCliente(String nome, String cpf, String telefone) {
@@ -23,14 +29,11 @@ public class ControladorWheels {
         System.out.println("SUCESSO: Cliente cadastrado e salvo no banco!");
     }
 
-    public List<Cliente> getListaClientes() { return listaClientes; }
-    public List<Bicicleta> getListaBicicletas() { return listaBicicletas; }
-    public List<Aluguel> getAlugueisAtivos() { return alugueisAtivos; }
-    public List<Manutencao> getManutencoesAtivas() { return manutencoesAtivas; }
 
     public void cadastrarBicicleta() {
         Bicicleta b = new Bicicleta();
         listaBicicletas.add(b);
+        gerenciadorCSV.salvarBicicletas(listaBicicletas);
         System.out.println("Nova bicicleta adicionada à frota! ID: " + b.getId());
     }
 
@@ -66,6 +69,11 @@ public class ControladorWheels {
         aluguel.realizarAluguel();
 
         alugueisAtivos.add(aluguel);
+        todosOsAlugueis.add(aluguel);
+
+        gerenciadorCSV.salvarBicicletas(listaBicicletas);
+        gerenciadorCSV.salvarTodosAlugueis(todosOsAlugueis);
+
         System.out.println("Aluguel #" + aluguel.getId() + " iniciado com sucesso para " + cliente.getNome());
     }
 
@@ -75,11 +83,10 @@ public class ControladorWheels {
             if (a.getId() == idAluguel) aluguel = a;
         }
         if (aluguel == null) {
-            System.out.println("Aluguel não encontrado."); return;
+            System.out.println("Aluguel não encontrado.");
+            return;
         }
-
         aluguel.registrarDevolucao(horasSimuladas);
-
         aluguel.verificarPagamento();
 
         Recibo recibo = new Recibo();
@@ -88,25 +95,20 @@ public class ControladorWheels {
 
         alugueisAtivos.remove(aluguel);
 
+        aluguel.getCliente().adicionarAoHistorico(aluguel);
         for(Cliente c : listaClientes) {
             c.adicionarAoHistorico(aluguel);
         }
 
-        for (Bicicleta b : listaBicicletas) {
-            if (b.getEstado().equals("CONSERTO")) {
-                boolean jaNaOficina = false;
-                for (Manutencao m : manutencoesAtivas) {
-                    if(m.toString().contains(String.valueOf(b.getId()))) {
-                        jaNaOficina = true;
-                    }
-                }
-                if (!jaNaOficina) {
-                    Manutencao nova = new Manutencao(manutencoesAtivas.size() + 1, b);
-                    nova.solicitarConserto();
-                    manutencoesAtivas.add(nova);
-                }
-            }
+        Bicicleta b = aluguel.getBicicleta();
+        if (b.getEstado().equals("CONSERTO")) {
+            Manutencao nova = new Manutencao(manutencoesAtivas.size() + 1, b);
+            nova.solicitarConserto();
+            manutencoesAtivas.add(nova);
         }
+
+        gerenciadorCSV.salvarBicicletas(listaBicicletas);
+        gerenciadorCSV.salvarTodosAlugueis(todosOsAlugueis);
     }
 
     public void finalizarManutencao(int index) {
@@ -114,8 +116,13 @@ public class ControladorWheels {
             Manutencao m = manutencoesAtivas.get(index);
             m.finalizarConserto();
             manutencoesAtivas.remove(index);
+            gerenciadorCSV.salvarBicicletas(listaBicicletas);
         } else {
-            System.out.println("Ordem inválida.");
+            System.out.println("Dado Inválido.");
         }
     }
+    public List<Cliente> getListaClientes() { return listaClientes; }
+    public List<Bicicleta> getListaBicicletas() { return listaBicicletas; }
+    public List<Aluguel> getAlugueisAtivos() { return alugueisAtivos; }
+    public List<Manutencao> getManutencoesAtivas() { return manutencoesAtivas; }
 }

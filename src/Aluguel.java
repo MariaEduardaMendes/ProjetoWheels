@@ -11,7 +11,21 @@ public class Aluguel {
     private String statusPagamento;
 
     private Bicicleta bicicleta;
-    private Recibo recibo;
+    private Cliente cliente;
+
+    public Aluguel(){}
+
+    public Aluguel(int id, Cliente cliente, Bicicleta bicicleta, double tempoDeUso, double valorTotal, String statusPagamento) {
+        this.id = id;
+        this.cliente = cliente;
+        this.bicicleta = bicicleta;
+        this.tempoDeUso = tempoDeUso;
+        this.valorTotal = valorTotal;
+        this.statusPagamento = statusPagamento;
+        if (id >= contadorId) {
+            contadorId = id + 1;
+        }
+    }
 
     public void realizarAluguel() {
         this.id = contadorId ++;
@@ -65,19 +79,12 @@ public class Aluguel {
         System.out.println("===============================");
     }
 
-    public void setBicicleta(Bicicleta bicicleta) {
-        this.bicicleta = bicicleta;
-    }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
-
-    public double getValorTotal() {
-        return this.valorTotal;
-    }
-
-    public int getId() {
-        return this.id;
-    }
+    public void setBicicleta(Bicicleta bicicleta) { this.bicicleta = bicicleta; }
+    public void setCliente(Cliente cliente) { this.cliente = cliente; }
+    public Cliente getCliente() { return cliente; }
+    public Bicicleta getBicicleta() { return bicicleta; }
+    public double getTempoDeUso() { return tempoDeUso; }
+    public String getStatusPagamento() { return statusPagamento; }
+    public double getValorTotal() { return this.valorTotal; }
+    public int getId() { return this.id; }
 }
