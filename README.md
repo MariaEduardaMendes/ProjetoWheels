@@ -1,10 +1,5 @@
 # 🚲 Projeto Wheels - Sistema de Aluguel de Bicicletas
 
-> ⚠️ **Status do Projeto: Em Desenvolvimento (Work in Progress)** ⚠️
-> Este repositório contém a documentação, modelagem estrutural e os esboços iniciais da implementação em Java para um sistema de gestão de locação de bicicletas. O projeto encontra-se atualmente na fase de mapeamento de requisitos e transição para o paradigma de Programação Orientada a Objetos (POO).
-
----
-
 ## 📖 1. Definição de Atores e Funcionalidades
 
 ### Atores do Sistema
